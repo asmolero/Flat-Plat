@@ -1,8 +1,8 @@
 * {
-  padding: 0;
+  // padding: 0;
   background-clip: padding-box;
 
-  -GtkToolButton-icon-spacing: 4;
+  -GtkToolButton-icon-spacing: 0;
   -GtkTextView-error-underline-color: $error_color;
 
   // The size for scrollbars. The slider is 2px smaller, but we keep it
@@ -26,12 +26,16 @@
 
   outline-style: solid;
   outline-width: 2px;
-  outline-color: $fill_color;
+  outline-color: transparent;
   outline-offset: -4px;
   -gtk-outline-radius: 2px;
 
   -gtk-secondary-caret-color: $primary_color;
 }
+
+switch:focus slider,
+notebook:focus tab,
+*:focus { outline-color: $fill_color; }
 
 
 /***************
@@ -110,9 +114,21 @@ flowbox {
   flowboxchild {
     padding: 4px;
     border-radius: 2px;
-    outline-offset: -2px;
+    // outline-offset: -2px;
 
     &:selected { @extend %selected_items; }
+  }
+}
+
+.content-view .tile {
+  // margin: 2px;
+  // padding: 0;
+  // border-radius: 0;
+  // background-color: $black;
+
+  &:selected {
+    background-color: transparent;
+    color: inherit;
   }
 }
 
@@ -277,13 +293,8 @@ entry {
 
   progress {
     margin: 2px (2px - 8px);
-    border-style: none none solid;
-    border-width: 2px;
-    border-color: $primary_color;
-    // border-radius: 0;
-    // box-shadow: none;
+    border-bottom: 2px solid $primary_color;
     background-color: transparent;
-    // background-image: none;
   }
 
    // linked entries
@@ -378,36 +389,18 @@ button {
     &.image-button {
       min-width: 24px;
       padding: ($medium_size - 24px) / 2;
-      border-radius: $circular_radius;
-      -gtk-outline-radius: $circular_radius;
+
+      &:not(.text-button) { @extend %circular_button; }
     }
 
     &.text-button.image-button {
-      border-radius: 2px;
-      -gtk-outline-radius: 2px;
-
       label {
-        &:first-child {
-          margin-left: 16px - ($medium_size - 24px) / 2;
-          margin-right: 2px;
-        }
+        &:first-child { margin-left: 16px - ($medium_size - 24px) / 2; }
 
-        &:last-child {
-          margin-left: 2px;
-          margin-right: 16px - ($medium_size - 24px) / 2;
-        }
-
-        &:only-child {
-          margin-left: 16px - ($medium_size - 24px) / 2;
-          margin-right: 16px - ($medium_size - 24px) / 2;
-        }
+        &:last-child { margin-right: 16px - ($medium_size - 24px) / 2; }
       }
 
-      image:not(:only-child) {
-        &:first-child { margin-left: (24px - 16px) / 2; }
-
-        &:last-child { margin-right: (24px - 16px) / 2; }
-      }
+      image:not(:only-child) { margin: 0 (24px - 16px) / 2; }
     }
 
     .linked > & { @extend %linked; }
@@ -418,15 +411,7 @@ button {
     .linked.vertical > &.flat {
       border-radius: 2px;
 
-      &.image-button {
-        border-radius: $circular_radius;
-        -gtk-outline-radius: $circular_radius;
-      }
-
-      &.text-button.image-button {
-        border-radius: 2px;
-        -gtk-outline-radius: 2px;
-      }
+      &.image-button:not(.text-button) { @extend %circular_button; }
     }
 
     &:drop(active) {
@@ -578,60 +563,40 @@ button {
 }
 
 // More inline toolbar buttons
-toolbar.inline-toolbar toolbutton {
+toolbar.inline-toolbar toolbutton:not(:only-child) {
   // > button.flat { @extend %linked_middle; }
 
-  // &:first-child > button.flat { @extend %linked:first-child; }
+  // &:first-child > button.flat { @extend %linked_first; }
 
-  // &:last-child > button.flat { @extend %linked:last-child; }
-
-  // &:only-child > button.flat { @extend %linked:only-child; }
+  // &:last-child > button.flat { @extend %linked_last; }
 }
 
-%linked_middle {
-  border-radius: 0;
-  -gtk-outline-radius: 2px;
+%linked:not(:only-child) {
+  @at-root %linked_middle,
+  & {
+    border-radius: 0;
+    -gtk-outline-radius: 2px;
+  }
+
+  @at-root %linked_first,
+  &:first-child { border-radius: 2px 0 0 2px; }
+
+  @at-root %linked_last,
+  &:last-child { border-radius: 0 2px 2px 0; }
 }
 
-%linked {
-  @extend %linked_middle;
-
-  &:first-child {
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
+%linked_vertical:not(:only-child) {
+  @at-root %linked_vertical_middle,
+  & {
+    border-radius: 0;
+    -gtk-outline-radius: 2px;
   }
 
-  &:last-child {
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
+  @at-root %linked_vertical_first,
+  &:first-child { border-radius: 2px 2px 0 0; }
 
-  &:only-child {
-    border-radius: 2px;
-  }
-}
-
-%linked_vertical_middle {
-  border-radius: 0;
-  -gtk-outline-radius: 2px;
-}
-
-%linked_vertical{
-  @extend %linked_vertical_middle;
-
-  &:first-child {
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-  }
-
-  &:last-child {
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
-
-  &:only-child {
-    border-radius: 2px;
-  }
+  @at-root %linked_vertical_last,
+  &:last-child { border-radius: 0 0 2px 2px; }
 }
 
 /* menu buttons */
@@ -657,12 +622,6 @@ modelbutton.flat,
 
     &:first-child { margin-left: -16px; margin-right: -8px; }
   }
-
-  check:not(:indeterminate):checked { @extend %check_checked; }
-
-  // radio:not(:indeterminate):checked { @extend %radio_checked; }
-
-  check:indeterminate:checked, radio:indeterminate:checked { @extend %indeterminate_checked; }
 }
 
 modelbutton.flat arrow {
@@ -861,23 +820,25 @@ combobox {
   }
 }
 
-.linked > combobox > box > button.combo {
-  // the combo is a composite widget so the way we do button linking doesn't
-  // work, special case needed. See
-  // https://bugzilla.gnome.org/show_bug.cgi?id=733979
+// the combo is a composite widget so the way we do button linking doesn't
+// work, special case needed. See
+// https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
-  &:dir(ltr),
-  &:dir(rtl) { @extend %linked_middle; } // specificity bump
+.linked:not(.vertical) > combobox:not(:only-child) {
+  > box > button.combo { @extend %linked_middle; }
+
+  &:first-child > box > button.combo { @extend %linked_first; }
+
+  &:last-child > box > button.combo { @extend %linked_last; }
 }
 
-.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
-.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
-.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
+.linked.vertical > combobox:not(:only-child) {
+  > box > button.combo { @extend %linked_vertical_middle; }
 
-.linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child; }
-.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
-.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
+  &:first-child > box > button.combo { @extend %linked_vertical_first; }
+
+  &:last-child > box > button.combo { @extend %linked_vertical_last; }
+}
 
 %combo_flat {
   border-radius: 0;
@@ -1265,23 +1226,19 @@ treeview.view {
   }
 
   &.progressbar { // progress bar in treeviews
-    border-style: none none solid;
-    border-width: $bar_size;
-    border-color: $primary_color;
+    border-bottom: $bar_size solid $primary_color;
     box-shadow: none;
     background-color: transparent;
 
-    &:selected { border-color: currentColor; }
+    &:selected { border-bottom-color: currentColor; }
   }
 
   &.trough { // progress bar trough in treeviews
-    border-style: none none solid;
-    border-width: $bar_size;
-    border-color: scale-alpha($primary_color, $lower_opacity);
+    border-bottom: $bar_size solid scale-alpha($primary_color, $lower_opacity);
     box-shadow: none;
     background-color: transparent;
 
-    &:selected { border-color: $fill_color; }
+    &:selected { border-bottom-color: $fill_color; }
   }
 
   header {
@@ -1955,18 +1912,25 @@ switch {
 // all assets are rendered from assets.svg. never add pngs directly
 
 // selection-mode
-@each $s, $as in ('', '-unchecked'),
-                 (':checked', '-checked') {
-  .view.content-view.check#{$s}:not(list) {
-    margin: 8px;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/selectionmode-checkbox#{$as}#{$asset_suffix}.png"),
-                                  url("assets/selectionmode-checkbox#{$as}#{$asset_suffix}@2.png"));
-    -gtk-icon-shadow: $shadow_1;
+.view.content-view.check:not(list),
+.content-view .tile check:not(list) {
+  min-height: 40px;
+  min-width: 40px;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+  -gtk-icon-shadow: $shadow_1;
 
-    &:hover, &:active { -gtk-icon-shadow: $shadow_2; }
+  &:hover, &:active { -gtk-icon-shadow: $shadow_2; }
+
+  @each $s, $as in ('', '-unchecked'),
+                   (':checked', '-checked') {
+    &#{$s} {
+      -gtk-icon-source: -gtk-scaled(url("assets/selectionmode-checkbox#{$as}#{$asset_suffix}.png"),
+                                    url("assets/selectionmode-checkbox#{$as}#{$asset_suffix}@2.png"));
+    }
   }
 }
 
@@ -1990,9 +1954,11 @@ radio {
 
   @extend %circular_button;
 
-  &:checked, &:indeterminate { color: $accent_color; }
+  &:checked, &:indeterminate {
+    color: $accent_color;
 
-  &:checked:disabled, &:indeterminate:disabled { color: scale-alpha($accent_color, $disabled_opacity); }
+    &:disabled { color: scale-alpha($accent_color, $disabled_opacity); }
+  }
 
   // &:only-child { margin: -12px; }
 
@@ -2013,7 +1979,6 @@ radio {
     &, &:hover, &:disabled {
       box-shadow: none;
       // color: inherit;
-      // animation: none;
     }
   }
 }
@@ -2030,10 +1995,6 @@ check {
                                             -gtk-recolor(url("assets/scalable/checkbox-mixed-symbolic.symbolic.png"))); }
 }
 
-$radio_indicator: 10px / $large_size / 2;
-$radio_radius_slice: #{$large_size / 2px};
-$radio_radius_width: #{$large_size / 2};
-
 %radio,
 radio {
   & { -gtk-icon-source: image(-gtk-recolor(url("assets/scalable/radio-unchecked-symbolic.svg")),
@@ -2045,94 +2006,63 @@ radio {
   &:indeterminate { -gtk-icon-source: image(-gtk-recolor(url("assets/scalable/radio-mixed-symbolic.svg")),
                                             -gtk-recolor(url("assets/scalable/radio-mixed-symbolic.symbolic.png"))); }
 
-  border-image: -gtk-gradient(radial,
-                              center center, 0,
-                              center center, 0.001,
-                              to($accent_color),
-                              to(transparent))
-                              $radio_radius_slice / $radio_radius_width;
+  border-image-slice: $large_size / 2px;
+  border-image-width: $large_size / 2;
 
-  &:checked {
-    border-image: -gtk-gradient(radial,
-                                center center, 0,
-                                center center, $radio_indicator,
-                                to($accent_color),
-                                to(transparent))
-                                $radio_radius_slice / $radio_radius_width;
- }
+  $radio_indicator: 10px / $large_size / 2;
 
-  &:checked:disabled {
-    border-image: -gtk-gradient(radial,
-                                center center, 0,
-                                center center, $radio_indicator,
-                                to(scale-alpha($accent_color, $disabled_opacity)),
-                                to(transparent))
-                                $radio_radius_slice / $radio_radius_width;
- }
-
-  &:indeterminate:checked {
-    border-image: -gtk-gradient(radial,
-                                center center, 0,
-                                center center, 0.001,
-                                to($accent_color),
-                                to(transparent))
-                                $radio_radius_slice / $radio_radius_width;
- }
-}
-
-// let's animate things
-@keyframes check_check {
-  from { -gtk-icon-transform: rotate(90deg); }
-  to { -gtk-icon-transform: unset; }
-}
-
-@keyframes check_radio { // FIXME: cannot animate border-image
-  from {
-    border-image: -gtk-gradient(radial,
-                                center center, 0,
-                                center center, 0.001,
-                                to($accent_color),
-                                to(transparent))
-                                $radio_radius_slice / $radio_radius_width;
+  & {
+    border-image-source: -gtk-gradient(radial,
+                                       center center, 0,
+                                       center center, 0.001,
+                                       to($accent_color),
+                                       to(transparent));
   }
 
-  to {
-    border-image: -gtk-gradient(radial,
-                                center center, 0,
-                                center center, $radio_indicator,
-                                to($accent_color),
-                                to(transparent))
-                                $radio_radius_slice / $radio_radius_width;
+  &:checked:not(:indeterminate) {
+    border-image-source: -gtk-gradient(radial,
+                                       center center, 0,
+                                       center center, $radio_indicator,
+                                       to($accent_color),
+                                       to(transparent));
+  }
+
+  &:checked:not(:indeterminate):disabled {
+    border-image-source: -gtk-gradient(radial,
+                                       center center, 0,
+                                       center center, $radio_indicator,
+                                       to(scale-alpha($accent_color, $disabled_opacity)),
+                                       to(transparent));
   }
 }
 
-@keyframes check_indeterminate {
-  from { -gtk-icon-transform: unset; }
-  50% { -gtk-icon-transform: scale(0, 1); }
-  to { -gtk-icon-transform: unset; }
-}
+// ANIMATION:
+// this is made with those pretty convoluted transitions, since checks and radios have to animate only on state changes,
+// the transformation is set on the active state and it get reset on the checked state.
+check:not(:checked):active { -gtk-icon-transform: rotate(90deg); }
 
-%check_checked,
-check:not(:indeterminate):checked { animation: check_check $longer_duration $standard_curve; }
+// radio:not(:checked):active { -gtk-icon-transform: scale(0); }
 
-check:not(:indeterminate):checked:active { animation: check_check $longer_duration $standard_curve, ripple_effect $longer_duration $deceleration_curve forwards; }
+check:not(:checked):indeterminate:active,
+radio:not(:checked):indeterminate:active { -gtk-icon-transform: scaleX(-1); } // instead of rotateY(180deg)
 
-// %radio_checked,
-// radio:not(:indeterminate):checked { animation: check_radio $longer_duration $standard_curve; }
+check:not(:checked),
+radio:not(:checked) {
+  & {
+    transition: $longer_transition,
+                background-size $ripple_duration $deceleration_curve,
+                background-image $ripple_duration * 2 $deceleration_curve,
+                -gtk-icon-transform 0;
+  }
 
-// radio:not(:indeterminate):checked:active { animation: check_radio $longer_duration $standard_curve, ripple_effect $longer_duration $deceleration_curve forwards; }
+  &:active {
+    transition: $longer_transition,
+                background-size 0,
+                background-image 0,
+                -gtk-icon-transform 0;
+  }
 
-%indeterminate_checked,
-check:indeterminate:checked, radio:indeterminate:checked { animation: check_indeterminate $longer_duration $standard_curve; }
-
-check:indeterminate:checked:active, radio:indeterminate:checked:active { animation: check_indeterminate $longer_duration $standard_curve, ripple_effect $longer_duration $deceleration_curve forwards; }
-
-// no animations in menus
-menu menuitem {
-  check:not(:indeterminate):checked,
-  radio:not(:indeterminate):checked,
-  check:indeterminate:checked,
-  radio:indeterminate:checked { animation: none; }
+  menu menuitem & { transition: none; }
 }
 
 treeview.view check,
@@ -2444,8 +2374,7 @@ progressbar {
 
     // trough { background-color: transparent; }
 
-    progress {
-    }
+    // progress { background-color: $primary_color; }
   }
 
   trough.empty progress { all: unset; } // makes the progress indicator disappear, when the fraction is 0
@@ -2475,27 +2404,25 @@ levelbar {
     &:disabled { @include entry(disabled); }
   }
 
-  &.horizontal.discrete block { margin: 0 1px; }
+  &.horizontal.discrete {
+    block { margin: 0 1px; }
 
-  &.vertical.discrete block { margin: 1px 0; }
+    trough { padding: 2px 1px; }
+  }
 
-  &.horizontal.discrete trough { padding: 2px 1px; }
+  &.vertical.discrete {
+    block { margin: 1px 0; }
 
-  &.vertical.discrete trough { padding: 1px 2px; }
+    trough { padding: 1px 2px; }
+  }
 
   block {
-    &.low {
-      background-color: $warning_color;
-    }
+    &.low { background-color: $warning_color; }
 
     &.high,
-    &:not(.empty) {
-      background-color: $primary_color;
-    }
+    &:not(.empty) { background-color: $primary_color; }
 
-    &.full {
-      background-color: $success_color;
-    }
+    &.full { background-color: $success_color; }
 
     &.empty {
       background-color: $fill_color;

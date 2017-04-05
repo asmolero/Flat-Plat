@@ -6,6 +6,7 @@ It supports GTK3, GTK2, Metacity, GNOME Shell, Unity, MATE, LightDM, GDM, Chrome
 Features
 --------
 <img src="../images/Button.gif" alt="Button" align="right"/>
+
 - Supports ripple effect animations (only GTK3 apps).
 - Supports both light and dark variants.
 - Supports dark or light titlebar versions.
@@ -31,13 +32,15 @@ Installation
 ------------
 Arch Linux users can install from the [AUR package](https://aur.archlinux.org/packages/flatplat-theme) maintained by @cthbleachbit.
 
+Fedora and EPEL users can also install from a [Copr repository](https://copr.fedorainfracloud.org/coprs/tcg/themes/).
+
 ### Manual Installation
 1. Open the terminal and run the following commands:
 
   ```sh
   cd /tmp
-  curl -sL https://github.com/nana-4/Flat-Plat/archive/v20170307.tar.gz | tar xz
-  cd Flat-Plat-20170307 && sudo ./install.sh
+  curl -sL https://github.com/nana-4/Flat-Plat/archive/v20170323.tar.gz | tar xz
+  cd Flat-Plat-20170323 && sudo ./install.sh
   ```
 
 2. Select the theme using `gnome-tweak-tool` or other suitable tools.
@@ -102,7 +105,6 @@ Thank you in advance for your cooperation!
 
 Planned Features
 ----------------
-- Supports of global dark theme
 - Supports of Xfce theme
 - Supports of Firefox theme ([in progress](https://github.com/nana-4/Flat-Plat/issues/78))
 - Supports of overlay scrollbars for Chrome/Chromium extension

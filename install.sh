@@ -11,8 +11,7 @@ fi
 
 echo
 
-# Not enabled color: '-dark'
-for color in '' '-light' ; do
+for color in '' '-dark' '-light' ; do
 	for size in '' '-compact' ; do
 		echo Installing Flat-Plat${color}${size} ...
 
@@ -35,26 +34,36 @@ for color in '' '-light' ; do
 		install -d ${themedir}/chrome
 		cd ${srcdir}/chrome
 		cp -ur \
-			"Flat-Plat Scrollbars.crx" \
 			"Flat-Plat${color} Theme.crx" \
 			${themedir}/chrome
+		if [ "$color" != '-dark' ] ; then
+			cp -ur \
+				"Flat-Plat Scrollbars.crx" \
+				${themedir}/chrome
+		else
+			cp -ur \
+				"Flat-Plat${color} Scrollbars.crx" \
+				${themedir}/chrome
+		fi
 
 		# Install GNOME Shell Theme
 		install -d ${themedir}/gnome-shell
 		cd ${srcdir}/gnome-shell/${gnomever}
 		cp -ur \
-			extensions \
 			no-events.svg \
 			no-notifications.svg \
-			pad-osd.css \
 			process-working.svg \
 			${themedir}/gnome-shell
+		cp -urL \
+			extensions \
+			pad-osd.css \
+			${themedir}/gnome-shell
 		if [ "$color" != '-dark' ] ; then
-			cp -ur \
+			cp -urL \
 				assets \
 				${themedir}/gnome-shell
 		else
-			cp -ur \
+			cp -urL \
 				assets${color} \
 				${themedir}/gnome-shell/assets
 		fi
