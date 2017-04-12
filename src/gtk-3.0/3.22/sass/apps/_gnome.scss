@@ -317,12 +317,7 @@ frame.gedit-map-frame > border {
   // background-color: shade(@theme_bg_color, 0.99);
   background-image: image($lighter_bg_color);
 
-  // hide separators
-  separator {
-    min-width: 0;
-    min-height: 0;
-    background-color: transparent;
-  }
+  separator { @extend %hide_separators; }
 }
 
 .tweak {
@@ -458,11 +453,7 @@ preferences stacksidebar.sidebar {
   &:dir(ltr),
   &:dir(rtl) { list { border-style: none; }}
 
-  list separator {
-    min-width: 0;
-    min-height: 0;
-    background-color: transparent;
-  }
+  list separator { @extend %hide_separators; }
 }
 
 preferences > box > box {
@@ -797,6 +788,18 @@ frame.commit-frame > border { border-style: solid none none; }
 box.dialog-vbox scrolledwindow.related { border: 1px solid $border_color; }
 
 list.categories { background-image: image($lighter_bg_color); }
+
+
+/*********
+ * Boxes *
+ *********/
+.transparent-bg + stack overlay > label {
+  min-height: 24px;
+  padding: 0 4px;
+  border-radius: $material_radius;
+  background-color: scale-alpha($black, $lower_opacity);
+  color: $white;
+}
 
 
 /**************
