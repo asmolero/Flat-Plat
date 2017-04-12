@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=X-GNOME-Metatheme
-Name=Flat-Plat-compact
+Name=Flat-Plat-compact-base16-SCHEME
 Comment=A Material Design-like theme
 Encoding=UTF-8
 
 [X-GNOME-Metatheme]
-GtkTheme=Flat-Plat-compact
-MetacityTheme=Flat-Plat-compact
+GtkTheme=Flat-Plat-compact-base16-SCHEME
+MetacityTheme=Flat-Plat-compact-base16-SCHEME
