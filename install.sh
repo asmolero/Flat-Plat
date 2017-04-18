@@ -15,7 +15,7 @@ for color in '' '-dark' '-light' ; do
 	for size in '' '-compact' ; do
 		echo Installing Flat-Plat${color}${size} ...
 
-		themedir=${destdir}/usr/share/themes/Flat-Plat-${color}${size}-base16-SCHEME
+		themedir=${destdir}/usr/share/themes/Flat-Plat${color}${size}-base16-ocean
 		install -d ${themedir}
 
 		# Copy COPYING
